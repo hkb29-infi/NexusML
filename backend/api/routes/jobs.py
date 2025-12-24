@@ -40,7 +40,7 @@ def create_job(
     job = job_service.create_job(db, job_data, current_user.id)
     
     # Add to execution queue (background task)
-    background_tasks.add_task(job_service.enqueue_job, job.id)
+    background_tasks.add_task(job_service.enqueue_job, db, job.id)
     
     return job
 

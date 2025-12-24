@@ -5,7 +5,7 @@ import uvicorn
 
 from backend.database import get_db, engine
 from backend.models import Base
-from backend.api.routes import jobs, auth, experiments
+from backend.api.routes import jobs, auth, experiments, metrics
 from backend.core.config import settings
 
 # Create tables
@@ -30,6 +30,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(jobs.router, prefix="/api/jobs", tags=["jobs"])
 app.include_router(experiments.router, prefix="/api/experiments", tags=["experiments"])
+app.include_router(metrics.router, tags=["metrics"])
 
  @app.get("/")
 def read_root():

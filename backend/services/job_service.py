@@ -31,19 +31,26 @@ class JobService:
         db.refresh(job)
         return job
     
-    def enqueue_job(self, job_id: uuid.UUID):
+    def enqueue_job(self, db: Session, job_id: uuid.UUID):
         """Add job to Redis queue for execution."""
         # Use sorted set for priority queue
         # Score = (priority * -1000000) + timestamp
         # This ensures higher priority jobs are processed first
         import time
-        job_data = self.get_job(db, job_id)
-        score = -job_data.priority * 1000000 + time.time()
+        job = self.get_job(db, job_id)
+        score = -job.priority * 1000000 + time.time()
         
         self.redis_client.zadd(
             "job_queue",
             {str(job_id): score}
         )
+
+    def dequeue_job(self):
+        """Pop highest priority job from queue."""
+        job_id = self.redis_client.zpopmin("job_queue")
+        if job_id:
+            return job_id[0][0]
+        return None
     
     def get_job(self, db: Session, job_id: uuid.UUID) -> Optional[Job]:
         """Get job by ID."""

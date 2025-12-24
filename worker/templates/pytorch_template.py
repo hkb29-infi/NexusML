@@ -112,7 +112,7 @@ def train():
             
             # Log metrics every 10 batches
             if batch_idx % 10 == 0:
-                log_metric(global_.step, "train_loss", loss.item())
+                log_metric(global_step, "train_loss", loss.item())
                 log_metric(global_step, "train_accuracy", 100. * correct / total)
                 
                 print(f"Epoch: {{epoch+1}}/{{EPOCHS}} | Batch: {{batch_idx}}/{{len(dataloader)}} | "

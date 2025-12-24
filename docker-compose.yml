@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15
@@ -43,6 +41,21 @@ services:
       - ./frontend:/app
     depends_on:
       - backend
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/worker.Dockerfile
+    volumes:
+      - ./worker:/workspace
+      - ./data:/data
+    environment:
+      REDIS_HOST: redis
+      API_URL: http://backend:8000
+    depends_on:
+      - backend
+      - redis
+      - postgres
 
 volumes:
   postgres_data:
