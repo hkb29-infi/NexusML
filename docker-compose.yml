@@ -22,11 +22,12 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - ./backend:/backend
       - ./worker:/worker
     environment:
-      DATABASE_URL: postgresql://nexus:dev_password @postgres:5432/nexusml
+      DATABASE_URL: postgresql://nexus:dev_password@postgres:5432/nexusml
       REDIS_URL: redis://redis:6379
+      PYTHONPATH: /
     depends_on:
       - postgres
       - redis
@@ -39,6 +40,9 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app
+    environment:
+      NODE_PATH: /app/node_modules
+    restart: unless-stopped
     depends_on:
       - backend
 

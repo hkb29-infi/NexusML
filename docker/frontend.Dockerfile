@@ -2,10 +2,11 @@ FROM node:18
 
 WORKDIR /app
 
-COPY frontend/package.json frontend/package-lock.json ./
+COPY frontend/package.json ./
 
 RUN npm install
 
-COPY ./frontend ./
+COPY frontend/src ./src
+COPY frontend/public ./public
 
-CMD ["npm", "start"]
+CMD ["npx", "react-scripts", "start"]

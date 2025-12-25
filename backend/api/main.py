@@ -32,13 +32,14 @@ app.include_router(jobs.router, prefix="/api/jobs", tags=["jobs"])
 app.include_router(experiments.router, prefix="/api/experiments", tags=["experiments"])
 app.include_router(metrics.router, tags=["metrics"])
 
- @app.get("/")
+@app.get("/")
 def read_root():
     return {"message": "NexusML API", "version": "0.1.0"}
 
- @app.get("/health")
+@app.get("/health")
 def health_check():
     return {"status": "healthy"}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import uvicorn
+    uvicorn.run("backend.api.main:app", host="0.0.0.0", port=8000, reload=True)

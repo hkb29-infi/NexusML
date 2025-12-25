@@ -43,3 +43,14 @@ class Metric(Base):
     metric_value = Column(Float, nullable=False)
     
     job = relationship("Job", back_populates="metrics_history")
+
+class Artifact(Base):
+    __tablename__ = "artifacts"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    job_id = Column(UUID(as_uuid=True), ForeignKey("jobs.id"), nullable=False)
+    artifact_type = Column(String(50), nullable=False)
+    file_path = Column(Text, nullable=False)
+    file_size = Column(Integer, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    job = relationship("Job", back_populates="artifacts")
